@@ -27,6 +27,15 @@ def lookup_basler(x, y, img_width, img_height):
 
 
 def detect_potatos(image):
+    """
+    Detects the presence of a potato in the given image.
+
+    Args:
+        image (str): Path to the input image file.
+
+    Returns:
+        list: List of (X, Y) coordinates.
+    """
     # roi = image[MASK_Y0:MASK_Y1, MASK_X0:MASK_X1]
     results = model(image, conf=0.5)
 
@@ -42,8 +51,6 @@ def detect_potatos(image):
             image = cv2.rectangle(image, (x0, y0), (x1, y1), (0, 0, 200), 2)
             xc, yc = (x0 + x1)//2, (y0 + y1)//2
             px_xy = lookup_basler(xc, yc, w, h)
-            # if px_xy:
-            #    detections += [px_xy]
             detections += [px_xy]
             image = cv2.rectangle(image, (x0, y0), (x1, y1), (100, 0, 200), 2)
             image = cv2.putText(image, f'{px_xy}', (xc, yc), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)
@@ -54,4 +61,5 @@ def detect_potatos(image):
 
 if __name__ == '__main__':
     img = cv2.imread('data/sample.jpg')
-    detect_potatos(img)
+    result = detect_potatos(img)
+    print('Potato Coordinates for data/sample.jpg are:', result)
